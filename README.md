@@ -1,4 +1,5 @@
 ||Connect 4 Tournament API
+__________________________________________
 
 What you need to play:
 
