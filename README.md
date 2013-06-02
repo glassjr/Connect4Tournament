@@ -42,10 +42,10 @@ We construct a game object, and then we return a winning Player object by callin
 Just to explain the parameters in the Game constructor:
 +    The first two arguments are Player objects. The first one will go first in the game.
 +    The next three arguments (e.g. "6,7,4") are the number of rows, columns, and k-in-a-row required for a win.
-+    +    As you can see, a Connect4 game has 6 rows, 7 columns, and requires 4 in a row.
++    As you can see, a Connect4 game has 6 rows, 7 columns, and requires 4 in a row.
 +    The last argument is a toggle for debug mode. It is by default always false.
-+    +    Debug mode allows you to print the board after every move and pause until you press enter
-+    +    This is useful for checking if your AI is behaving properly.
++    Debug mode allows you to print the board after every move and pause until you press enter
++    This is useful for checking if your AI is behaving properly.
 
 ==========================================
 
@@ -55,10 +55,10 @@ You MUST implement the "public int nextMove(Board board, Chip color)" method.
 +    nextMove takes Board and Chip objects and returns the column the AI wants to place a Chip in.
 +    The AI is free to mutate the passed objects as much as it wants, as they are copies from the Game
 +    Note that if your method throws an exception or returns a column number that doesn't exist or is full, you lose the game.
-+    +    Columns have zero-based indices. (For Connect4, columns are numbered [0-6])
++    Columns have zero-based indices. (For Connect4, columns are numbered [0-6])
 
 You may (but don't have to) implement the "public void acceptEndGame(Board board, Chip myColor, Chip winningColor)" method
 +    This is provided for AIs that will learn over the course of the Tournament.
 +    After every game in a tournament, this method will be called on each AI.
 +    It is passed the final board state, the AI's Chip color for that game, and the Chip color of the winner.
-+    +    If the game is a draw, the winning Chip is null
++    If the game is a draw, the winning Chip is null
