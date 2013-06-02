@@ -37,12 +37,12 @@ public class Game
         Location lastMove = new Location(0,0);
         while(!board.isWon(lastMove, kInRow) && board.hasAvailableMove()) {
             try{
-                Board copy = new Board(board);
+                Board copyBoard = getCopyBoard();
 
                 Chip color = (moveCount%2 == 0) ? Chip. BLACK: Chip.RED;
                 Player nextPlayer = (moveCount%2 == 0) ? black : red;
                          
-                int col = nextPlayer.makeMove(board, color);
+                int col = nextPlayer.makeMove(copyBoard, color);
                 lastMove = board.findPlacing(col);
 
                 boolean validMove = board.set(lastMove, color);
