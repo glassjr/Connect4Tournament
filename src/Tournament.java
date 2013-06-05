@@ -93,23 +93,34 @@ public class Tournament
         }
     }
 
+    private void sendPlayerEndGame(TournamentPlayer tp, Chip itsColor, Chip winner, Game g){
+        Player player = tp.getPlayer();
+        Board copyBoard = g.getCopyBoard();
+        try{
+            player.acceptEndGame(copyBoard, itsColor, winner);
+        }catch(Exception e){
+            //Player AI threw an exception during acceptEndGame
+            //Should there be a penalty here?
+        }
+    }
+    
     public void goPlayGame(TournamentPlayer tp1, TournamentPlayer tp2){
         Game g = new Game(tp1.getPlayer(), tp2.getPlayer(), 6, 7, 4, debugMode);
         Player winner = g.playGame();
         if(winner == null){
             tp1.addDraw();  tp2.addDraw();
-            tp1.getPlayer().acceptEndGame(g.getCopyBoard(), Chip.BLACK, null);
-            tp2.getPlayer().acceptEndGame(g.getCopyBoard(), Chip.RED, null);
+            sendPlayerEndGame(tp1, Chip.BLACK, null, g);
+            sendPlayerEndGame(tp2, Chip.RED, null, g);
         }
         else if(winner == tp1.getPlayer()){
             tp1.addWin();   tp2.addLoss();
-            tp1.getPlayer().acceptEndGame(g.getCopyBoard(), Chip.BLACK, Chip.BLACK);
-            tp2.getPlayer().acceptEndGame(g.getCopyBoard(), Chip.RED, Chip.BLACK);
+            sendPlayerEndGame(tp1, Chip.BLACK, Chip.BLACK, g);
+            sendPlayerEndGame(tp2, Chip.RED, Chip.BLACK, g);
         }
         else if(winner == tp2.getPlayer()){
             tp1.addLoss();  tp2.addWin();
-            tp1.getPlayer().acceptEndGame(g.getCopyBoard(), Chip.BLACK, Chip.RED);
-            tp2.getPlayer().acceptEndGame(g.getCopyBoard(), Chip.RED, Chip.RED);
+            sendPlayerEndGame(tp1, Chip.BLACK, Chip.RED, g);
+            sendPlayerEndGame(tp2, Chip.RED, Chip.RED, g);
         }
 
         if(suspenseMode){

@@ -53,8 +53,14 @@ public class Board
     public boolean isWon(Location lastMove, int k){
         return whoWon(lastMove, k) != null;
     }
-    
+
     public Chip whoWon(Location lastMove, int k){
+        //If it's an invalid location or the cell at that location
+        //is empty, then it's assumed no one has won there yet.
+        if(!isValid(lastMove.row, lastMove.col)
+        || gameBoard[lastMove.row][lastMove.col].isEmpty())
+            return null;
+
         //columns
         int colBegin = Math.max(0, lastMove.row-(k-1));
         int colEnd = Math.min(gameBoard.length-1, lastMove.row+(k-1));
@@ -64,7 +70,7 @@ public class Board
         }
         Chip who = checkKRun(k, colCells);
         if(who != null) return who;
-        
+
         //rows
         int rowBegin = Math.max(0, lastMove.col-(k-1));
         int rowEnd = Math.min(gameBoard[0].length-1, lastMove.col+(k-1)); 
@@ -72,9 +78,9 @@ public class Board
         for(int i=0; i<rowCells.length; i++){
             rowCells[i] = gameBoard[lastMove.row][i+rowBegin];
         }
-        who = checkKRun(k, colCells);
+        who = checkKRun(k, rowCells);
         if(who != null) return who;
-        
+
         //southwest-to-northeast diagonal
         int rBegin = lastMove.row + (k-1);
         int cBegin = lastMove.col - (k-1);
@@ -90,9 +96,9 @@ public class Board
         for(int i=0; i<diagCells.length; i++){
             diagCells[i] = gameBoard[rBegin-i][cBegin+i];
         }
-        who = checkKRun(k, colCells);
+        who = checkKRun(k, diagCells);
         if(who != null) return who;
-        
+
         //southeast-to-northwest diagonal
         rBegin = lastMove.row + (k-1);
         cBegin = lastMove.col + (k-1);
@@ -111,8 +117,7 @@ public class Board
         return checkKRun(k, diagCells);
         //that was the last check!
     }
-    
-    
+
     private Chip checkKRun(int k, Cell[] cells) {
         if(cells.length < k) return null;
         Chip currentColor = Chip.EMPTY;
@@ -142,11 +147,11 @@ public class Board
     public Chip getChip(int r, int c){
         return gameBoard[r][c].chip();
     }
-    
+
     public int rows(){
         return gameBoard.length;
     }
-    
+
     public int columns(){
         return gameBoard[0].length;
     }

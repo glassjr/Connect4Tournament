@@ -18,7 +18,7 @@ public class Game
     public Game(Player b, Player r) {
         this(b, r, 6, 7, 4, false);
     }
-    
+
     public Game(int numRow, int numCol, int k){
         this(new HumanPlayer("Black"), new HumanPlayer("Red"), numRow, numCol, k, false);
     }
@@ -36,33 +36,36 @@ public class Game
     {
         Location lastMove = new Location(0,0);
         while(!board.isWon(lastMove, kInRow) && board.hasAvailableMove()) {
+            Player nextPlayer = (moveCount%2 == 0) ? black : red;
+            Chip color = (moveCount%2 == 0) ? Chip. BLACK: Chip.RED;
+
+            int col;
+            boolean validMove;
+
             try{
-                Board copyBoard = getCopyBoard();
-
-                Chip color = (moveCount%2 == 0) ? Chip. BLACK: Chip.RED;
-                Player nextPlayer = (moveCount%2 == 0) ? black : red;
-                         
-                int col = nextPlayer.makeMove(copyBoard, color);
+                col = nextPlayer.makeMove(getCopyBoard(), color);
                 lastMove = board.findPlacing(col);
-
-                boolean validMove = board.set(lastMove, color);
-                if(validMove)
-                    moveCount++;
-                else
-                    break; //invalid move from nextPlayer.makeMove
-                    
-                if(debugMode){
-                    System.out.println(board);
-                    System.in.read();
-                }
+                validMove = board.set(lastMove, color);
             }catch(Exception e){
-                break; //nextPlayer.makeMove threw an error
+                lastMove = new Location(-1,-1);
+                validMove = false;
+                if(debugMode) System.out.println(nextPlayer + " threw an error: \n\t" + e);
+            }
+
+            if(validMove)
+                moveCount++;
+            else
+                break; //invalid move from nextPlayer.makeMove
+
+            if(debugMode){
+                System.out.println(board);
+                try{ System.in.read(); }catch(Exception e){}
             }
         }
         return returnWinner(lastMove);
 
     }
-    
+
     public Board getCopyBoard(){
         return new Board(board);
     }
@@ -75,7 +78,6 @@ public class Game
         else //there was a draw
             return null;
     }
-
 
     public String toString() {
         return board.toString();

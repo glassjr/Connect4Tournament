@@ -21,6 +21,7 @@ In DeveloperTools we find some basic classes to help develop a Player subclass
 
 +    HumanPlayer : A Player object that allows a human to play by taking moves from std.in and printing moves to std.out
 +    RandomAI : A Player object that makes random moves safely.
++    ErrorAI : A Player object that always immediately throws an exception (tries dividing by zero)
 +    TestRunner: A class that demonstrates how to construct a connect 4 game with two Players
 
 Note that there are also two classes Tournament and TournamentPlayer in the main src folder.
@@ -29,10 +30,10 @@ Feel free to look at the source, however. (Tournament is the messiest class in t
 
 ==========================================
 
-######To understand how to create your own Player class, you must read the source code for this project.
+#####To understand how to create your own Player class, you must read the source code for this project.
 However, here's a quick look at TestRunner, so you can just get a feel for how the game works.
 
-If you look at the main code in TestRunner, you'll see some code along the lines of:
+If you look at the humanGame method in TestRunner, you'll see some code along the lines of:
 
 	Game game = new Game(new HumanPlayer("Black"),new RandomAI(), 6,7,4,false);
 	Player winner = game.playGame();
@@ -49,12 +50,11 @@ Just to explain the parameters in the Game constructor:
 
 ==========================================
 
-######Final notes on subclassing Player:
+#####Final notes on subclassing Player:
 
 You MUST implement the "public int nextMove(Board board, Chip color)" method.
 +    nextMove takes Board and Chip objects and returns the column the AI wants to place a Chip in.
 +    The AI is free to mutate the passed objects as much as it wants, as they are copies from the Game
-+    Note that if your method throws an exception or returns a column number that doesn't exist or is full, you lose the game.
 +    Columns have zero-based indices. (For Connect4, columns are numbered [0-6])
 
 You may (but don't have to) implement the "public void acceptEndGame(Board board, Chip myColor, Chip winningColor)" method
@@ -62,3 +62,8 @@ You may (but don't have to) implement the "public void acceptEndGame(Board board
 +    After every game in a tournament, this method will be called on each AI.
 +    It is passed the final board state, the AI's Chip color for that game, and the Chip color of the winner.
 +    If the game is a draw, the winning Chip is null
+
+Quick notes on illegal behavior
++    If your nextMove returns a column not on the board, you lose the game
++    If your nextMove throws an exception, you lose the game
++    If you implement acceptEndGame, currently exceptions are not penalized. This is subject to change.
