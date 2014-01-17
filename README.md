@@ -1,5 +1,6 @@
 #Connect 4 Tournament API
 __________________________________________
+###Created by: Joseph Rock and Jacob Glass
 
 ###In order to make a playable AI, you must extend the Player class
 
